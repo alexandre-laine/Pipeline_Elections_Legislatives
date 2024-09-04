@@ -1,0 +1,99 @@
+% Choose the report format
+\documentclass[11pt]{article}
+\usepackage[
+    a4paper,
+    left=20mm,
+    right=20mm,
+    top=20mm,
+    bottom=20mm
+    ]{geometry}
+\renewcommand{\baselinestretch}{2}
+\usepackage{setspace} % set 1.5 spacing
+\onehalfspacing
+\usepackage{helvet} % set font type
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{fancyhdr}
+
+% Encoding parameters (always necessary ?)
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+
+% % Make some reference, bibliography and others
+% \usepackage{biblatex}
+% \addbibresource{biblio.bib}
+
+\usepackage{wrapfig}
+\usepackage{hyperref}
+\usepackage{caption}
+
+% For the math symbol in latex equations
+\usepackage{amsmath}
+
+\begin{document}
+    
+    %-------------------------
+    % Page de Garde
+    %-------------------------
+
+    \pagestyle{fancy}
+    \fancyfoot{}
+    \vspace{5cm}
+
+    \begin{center}
+        \Large \textbf{Analyse du report des voix entre les deux tours des élections législatives anticipées de 2024.}
+    \end{center}
+    
+    \vspace{2cm}
+    
+    \begin{center}
+        Mémoire en vu de l'obtention du Diplôme d'Etudes Supérieures Universitaires de Data Science \\
+        \textit{par Alexandre Lainé}
+    \end{center}
+
+    \newpage
+    % Document format
+    \pagestyle{fancy}
+    \fancyhead{} % clear all header fields
+    \fancyhead[L]{Alexandre Lainé}
+    \fancyhead[R]{Mémoire DESU de Data Science}
+    \fancyfoot{} % clear all footer fields
+    \fancyfoot[R]{\thepage}
+
+    %-------------------------
+    % Intro, Question Scientifique et Contexte (1page)
+    %-------------------------
+    \section*{Introduction}
+
+    Peu après les élections européenne 2024 auxquelles la liste du Rassemblement National (RN), porté par Jordan Bardella et Marine Le Pen, a obtenu 37 \% des suffrages. Le Président de la République a décidé de dissoudre l'Assemblée Nationale et ainsi déclencher des élections législatives anticipées. Après un premier tour record pour le RN, c'est finallement le Nouveau Front Populaire (NFP ou Union de la Gauche, UG) qui est arrivé en tête après un entre deux tours rythmé par les désistements et les consignes de votes afin de faire barrage au RN dans un maximum de circonscriptions. 
+
+    Ces mouvements de voix sont particulièrement interressant car il est possible de se demander s'il est possible de prédire à partir des résultats du premier tour comment va dérouler le second. Basée sur cette question
+    
+    \newpage
+    %-------------------------
+    % Matériel et Méthodes (3pages)
+    %-------------------------
+    \section*{Matériel et Méthodes}
+        \subsection*{Jeu de donnés}
+            Résultats des élections législatives pour le premier et second tour pour chaque bureau de vote en France métropolitaine, dans les Territoires d'Outre Mer, mais aussi à  l'étranger. Il s'agit respectivement de fichier d'environ 40 et 16 Mo, renseignant pour chaque bureau de vote le nombre de voix obtenu par chaque candidat.
+        
+        \subsection*{Préprocessing}
+
+        \subsection*{Modèle de transfert de voix}
+
+        \subsection*{Auto-Encodeur}
+
+    \newpage
+    %-------------------------
+    % Résultats (4pages)
+    %-------------------------
+    \section*{Résultats}
+
+    \newpage
+    %-------------------------
+    % Discussion (1page) + Références
+    %-------------------------
+    \section*{Discussion}
+
+    \section*{Références}
+\end{document}
