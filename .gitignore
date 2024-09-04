@@ -161,3 +161,8 @@ cython_debug/
 
 # DATA
 adresses_reu.csv
+rapport/LAINE_Alexandre_Memoire_DESU_2024.aux
+rapport/LAINE_Alexandre_Memoire_DESU_2024.fdb_latexmk
+rapport/LAINE_Alexandre_Memoire_DESU_2024.fls
+rapport/LAINE_Alexandre_Memoire_DESU_2024.out
+rapport/LAINE_Alexandre_Memoire_DESU_2024.synctex.gz
