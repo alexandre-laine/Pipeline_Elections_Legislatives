@@ -9,19 +9,6 @@ import numpy as np
 from tqdm import tqdm
 from torch.utils.data import TensorDataset, DataLoader
 from sklearn.model_selection import train_test_split
-
-# class TransfertVoix(torch.nn.Module):
-#     def __init__(self, N_1er, N_2eme):#, device=None):
-#         super(TransfertVoix, self).__init__()
-        
-#         self.lin = torch.nn.Linear(N_2eme, N_1er, bias=False)
-
-#     def forward(self, p_1):
-        
-#         M = torch.softmax(self.lin.weight, axis=1)
-#         p_2_pred = torch.matmul(p_1, M)
-        
-#         return p_2_pred
     
 class TransfertVoix(torch.nn.Module):
     def __init__(self, N_1er, N_2eme):#, device=None):
@@ -31,10 +18,10 @@ class TransfertVoix(torch.nn.Module):
 
     def forward(self, p_1):
         
-        p_1_calmped = p_1 * (p_1 > 0.125)
+        # p_1_calmped = p_1 * (p_1 > 0.125) # Ajout d'un clampage
 
         M = torch.softmax(self.lin.weight, axis=1)
-        p_2_pred = torch.matmul(p_1_calmped, M)
+        p_2_pred = torch.matmul(p_1, M)
         
         return p_2_pred
     
@@ -58,7 +45,6 @@ def fit_data(
     
     seed=2024,
     device=None
-        
 ):
     
     # Paramètrage des calculs
@@ -111,12 +97,6 @@ def fit_data(
 
             p_1, p_2 = p_1.to(device), p_2.to(device)
             sum_1, sum_2 = p_1.sum(axis=1)[:,None], p_2.sum(axis=1)[:,None]
-            
-            # # Sécurisation anti 0
-            # if np.where(sum_1 == 0)[0].size > 0:
-            #     sum_1[np.where(sum_1 == 0)[0]] = 1
-            # if np.where(sum_2 == 0)[0].size > 0:
-            #     sum_2[np.where(sum_2 == 0)[0]] = 1
 
             p_1t = p_1 / sum_1
             p_2t = p_2 / sum_2
