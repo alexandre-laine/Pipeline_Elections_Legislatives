@@ -78,8 +78,8 @@ def fit_data(
         random_state=seed, 
         shuffle=True
     )
-    X_train, X_test = pre_X_train[pre_X_train.keys()[:-2]], pre_X_test[pre_X_test.keys()[:-2]]
-    Y_train, Y_test = pre_Y_train[pre_Y_train.keys()[:-2]], pre_Y_test[pre_Y_test.keys()[:-2]]
+    X_train, X_test = pre_X_train[pre_X_train.keys()[:-1]], pre_X_test[pre_X_test.keys()[:-1]]
+    Y_train, Y_test = pre_Y_train[pre_Y_train.keys()[:-1]], pre_Y_test[pre_Y_test.keys()[:-1]]
 
     # X_Votants_train, X_Votants_test = pre_X_train[pre_X_train.keys()[-1:]], pre_X_test[pre_X_test.keys()[-1:]]
     # Y_Votants_train, Y_Votants_test = pre_Y_train[pre_Y_train.keys()[-1:]], pre_Y_test[pre_Y_test.keys()[-1:]]
@@ -112,11 +112,11 @@ def fit_data(
             p_1, p_2 = p_1.to(device), p_2.to(device)
             sum_1, sum_2 = p_1.sum(axis=1)[:,None], p_2.sum(axis=1)[:,None]
             
-            # Sécurisation anti 0
-            if np.where(sum_1 == 0)[0].size > 0:
-                sum_1[np.where(sum_1 == 0)[0]] = 1
-            if np.where(sum_2 == 0)[0].size > 0:
-                sum_2[np.where(sum_2 == 0)[0]] = 1
+            # # Sécurisation anti 0
+            # if np.where(sum_1 == 0)[0].size > 0:
+            #     sum_1[np.where(sum_1 == 0)[0]] = 1
+            # if np.where(sum_2 == 0)[0].size > 0:
+            #     sum_2[np.where(sum_2 == 0)[0]] = 1
 
             p_1t = p_1 / sum_1
             p_2t = p_2 / sum_2
@@ -136,12 +136,12 @@ def fit_data(
         with torch.no_grad():
             
             x_test = torch.Tensor(X_test.to_numpy()).to(device)
-            sum_test_1 = x_test.sum(axis=-1)[:,None].to(device)
-            sum_test_1[np.where(sum_test_1 == 0)] = 1
+            sum_test_1 = x_test.cpu().sum(axis=-1)[:,None].to(device)
+            sum_test_1[np.where(sum_test_1.cpu() == 0)] = 1
 
             y_test = torch.Tensor(Y_test.to_numpy()).to(device)
-            sum_test_2 = y_test.sum(axis=-1)[:,None].to(device)
-            sum_test_2[np.where(sum_test_2 == 0)] = 1
+            sum_test_2 = y_test.cpu().sum(axis=-1)[:,None].to(device)
+            sum_test_2[np.where(sum_test_2.cpu() == 0)] = 1
 
             Y_pred = trans(x_test / sum_test_1)
             
