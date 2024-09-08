@@ -19,9 +19,9 @@
 \usepackage[T1]{fontenc}
 \usepackage[french]{babel}
 
-% % Make some reference, bibliography and others
-% \usepackage{biblatex}
-% \addbibresource{biblio.bib}
+% Make some reference, bibliography and others
+\usepackage{biblatex}
+\addbibresource{biblio.bib}
 
 \usepackage{wrapfig}
 \usepackage{hyperref}
@@ -38,6 +38,8 @@
 
     \pagestyle{fancy}
     \fancyfoot{}
+    \fancyfoot[L]{Aix-Marseille Université}
+    \fancyfoot[R]{2023/2024}
     \vspace{5cm}
 
     \begin{center}
@@ -63,37 +65,64 @@
     %-------------------------
     % Intro, Question Scientifique et Contexte (1page)
     %-------------------------
-    \section*{Introduction}
+    \section{Introduction}
 
-    Peu après les élections européenne 2024 auxquelles la liste du Rassemblement National (RN), porté par Jordan Bardella et Marine Le Pen, a obtenu 37 \% des suffrages. Le Président de la République a décidé de dissoudre l'Assemblée Nationale et ainsi déclencher des élections législatives anticipées. Après un premier tour record pour le RN, c'est finallement le Nouveau Front Populaire (NFP ou Union de la Gauche, UG) qui est arrivé en tête après un entre deux tours rythmé par les désistements et les consignes de votes afin de faire barrage au RN dans un maximum de circonscriptions. 
+    Peu après les élections européenne 2024 auxquelles la liste du Rassemblement National (RN), porté par Jordan Bardella et Marine Le Pen, a obtenu 37 \% des suffrages \cite{Résultats_européennes_2024_2024}. Le Président de la République a décidé de dissoudre l'Assemblée Nationale et ainsi déclencher des élections législatives anticipées. Après un premier tour record pour le RN, c'est finallement le Nouveau Front Populaire (NFP ou Union de la Gauche, UG) qui est arrivé en tête (182 sièges) après un entre deux tours rythmé par les désistements et les consignes de votes afin de faire barrage au RN dans un maximum de circonscriptions \cite{Élections_législatives_françaises_de_2024_2024}. 
 
-    Ces mouvements de voix sont particulièrement interressant car il est possible de se demander s'il est possible de prédire à partir des résultats du premier tour comment va dérouler le second. Basée sur cette question
+    Ces mouvements de voix sont particulièrement interressant car on peut alors se demander s'il est possible de prédire à partir des résultats du premier tour comment va dérouler le second. Basée sur cette question, il s'agirait par conséquent de déviner les mouvements de voix entre les deux tours en sachant que ce sont majoritairement les électeurs des partis perdant qui doivent alors faire un choix. En guise de base à ce travail, il a été décrit et imaginé, par Laurent Perrinet, une approche permettant d'estimer le transfert des voix entre les deux tours des élections présidentielles de 2022 \cite{Perrinet_2022}.
     
     \newpage
     %-------------------------
     % Matériel et Méthodes (3pages)
     %-------------------------
-    \section*{Matériel et Méthodes}
-        \subsection*{Jeu de donnés}
-            Résultats des élections législatives pour le premier et second tour pour chaque bureau de vote en France métropolitaine, dans les Territoires d'Outre Mer, mais aussi à  l'étranger. Il s'agit respectivement de fichier d'environ 40 et 16 Mo, renseignant pour chaque bureau de vote le nombre de voix obtenu par chaque candidat.
+    \section{Matériel et Méthodes}
+
+        \subsection*{Jeux de donnés}
+            Résultats des élections législatives pour le premier et second tour pour chaque bureau de vote en France métropolitaine, dans les Territoires d'Outre Mer, mais aussi à  l'étranger. Il s'agit respectivement de fichier d'environ 40 et 16 Mo, renseignant pour chaque bureau de vote le nombre de voix obtenu par chaque candidat, ainsi que le nombre d'inscrit, le nombre d'abstension et le nombre de bulletin nul.
         
-        \subsection*{Préprocessing}
+        \subsection*{Pré-processing des données}
+            De façon géénral l'objectif de cette phase de préprocessing 
+
+        \subsection*{Analyse géographique}
+
 
         \subsection*{Modèle de transfert de voix}
+            Si on considère le pourcentage de voix obtenu par chaque partie dans un bureau de vote comme une distribution discrète notée $D$, l'hypothèse est qu'il existerait une matrice de transition $M$ permettant de faire le lien entre les distributions du premier et second tour (respectivement $D_1$ et $D_2$). Mathématiquement, cela s'exprimerait comme suit :
+            \begin{equation}
+                \hat{D_2} = D_1 \times M
+            \end{equation}
 
-        \subsection*{Auto-Encodeur}
+        \subsection*{Fonction de coût}
+            \subsubsection*{Divergence de Kullback-Leilbler}
+                La divergence de Kullback-Leilbler \cite{Kullback_Leibler_1951} ($KL$) est une mesure permettant la comparaison entre deux distributions de probabilités discrètres. Celle-ci nous permettra de comparer la distance entre les distributions réelles du second tour ($D_2$) et celles prédites par notre modèle ($\hat{D_2}$) selon la formule suivante :
+                \begin{equation}
+                    KL(D_2,\hat{D_2}) = \sum_{k \in \Omega} D_2 \cdot \log \frac{D_2}{\hat{D_2}}
+                \end{equation}
+
+            \subsection*{Distance de Hamming}
+                La distance de Hamming (Ham) permet de quantifier la distance mathématiques entre deux séquences. Si on la considère dans notre cas, il s'agit d'une quantification de la distance entre la séquence réelle des résultats du second tour ($D_2$) et la séquence prédite par le model ($\hat{D_2}$) selon la formule suivante :
+                \begin{equation}
+                    Ham(D_2, \hat{D_2}) = \sum_{i=0}^{n-1}(D_2_i \bigoplus \hat{D_2_i})
+                \end{equation}
+
+        \subsection*{Visualisation et représentations graphiques}
+            Afin de visualiser le jeu de donné et de rendre compte des différents résultats obtenues dans cette pipeline, il a été choisis d'utiliser principalement les bibliothèques matplotlib (version 3.9.0) et seaborn (version 0.13.2) pour leurs simplicités d'utilisation mais aussi de découvrir plotly (version 5.24.0) pour la qualité de ses graphiques interactifs et sa capacité à gérer une grande quantité de données. La plus part des figures créer das la pipeline sont enregistrées de façon automatique en format pdf au sein du dossier "fig" de la pipeline.
+            
+        \subsection*{Information supplémentaires}
+            L'ensemble des codes de la pipeline sont disponible en libre accès sur la plateforme GitHub en cliquant juste \href{https://github.com/alexandre-laine/Pipeline_Elections_Legislatives}{ici}. L'ensemble de l'analyse a été développée et écrite pour le mémoire du DESU avec le langage de programmation Python (version 3.11.9) majoritairement sous la forme de notebook appellant des fonctions écrite par mes soins. Les calculs ont été réalisé en local sur mon ordinateur personnel (OMEN by HP Laptop 16-xf0xx) ayant les caratéristiques ci-contre (CPU : AMD Ryzen 9 7940HS, GPU-1 : AMD Radeon 780M, GPU-2 : NVIDIA GeForce RTX 4070).
 
     \newpage
     %-------------------------
     % Résultats (4pages)
     %-------------------------
-    \section*{Résultats}
+    \section{Résultats}
 
     \newpage
     %-------------------------
     % Discussion (1page) + Références
     %-------------------------
-    \section*{Discussion}
+    \section{Discussion}
 
-    \section*{Références}
+    \printbibliography
+
 \end{document}

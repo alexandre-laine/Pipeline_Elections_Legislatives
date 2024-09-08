@@ -11,6 +11,7 @@ Questionnement : S'il existe un règle permettant de lier les résultats du prem
 Mise en place de la pipeline d'analyse avec :
 - Préprocessing : Mise en forme des données.
 - Visualisation : Première exploration des données et test avec matplotlib/seaborn/plotly.
+- Supervised Search : Prédiction des résultats en utilisant les paramètres de chaque bureau de vote (Département, Communes, Nombre d'inscrit)
 - Modèlisation Transfert :  Reproduction plutôt fidèle du modèle et de la méthode utilisée pour prédire les reports de vois lors du second tour des élections présidentielles.
 - Autoencodeur : Test de l'autoencodeur parce que je n'ai jamais utilisé ni fait ce type de réseau et je pense qu'il peut peut être nous mettre en avant des éléments sur lesquels je dois m'attarder !
 

@@ -142,19 +142,15 @@ def prepare(
             df_6[nuance] = df_nuance
 
         df_6["Code_id_bv"] = df_5["Code_id_bv"].unique()
-        df_7 = pd.DataFrame(df_6.to_numpy(), columns=df_6.keys().fillna("autre"))
 
-        # Normalisation
-        df_8 = df_7[df_7.keys()[:-1]].to_numpy().T / (np.sum(df_7[df_7.keys()[:-1]].to_numpy(), axis=1) + 1)
-        df_n = pd.DataFrame(df_8.T, columns=df_7.keys()[:-1]).fillna(0)
+        df_7 = pd.concat([df_6,df_5.iloc[:df_6.shape[0]][df_5.keys()[11]]], axis=1)
 
-        # Dataframe final
-        T_df = pd.concat([df_n, df_7["Code_id_bv"]], axis=1)
+        df_8 = pd.DataFrame(df_7.to_numpy(), columns=df_7.keys().fillna("autre"))
 
         # Enregistrement du dataset après preprocessing
-        T_df.to_csv(process_dataframe, index=False)
+        df_8.to_csv(process_dataframe, index=False)
 
-        return T_df, bv_encodeur
+        return df_8, bv_encodeur
 
 def clear(
     df_1,
@@ -174,14 +170,14 @@ def clear(
     if os.path.exists(final_dataframe1) and os.path.exists(final_dataframe2):
 
         print("The cleaning phase has already been completed !")
-        df_1f = pd.read_csv(final_dataframe1)
-        df_2f = pd.read_csv(final_dataframe2)
+        df_1ff = pd.read_csv(final_dataframe1)
+        df_2ff = pd.read_csv(final_dataframe2)
     
     else:
 
         print("We need to clean up this dataset !")
         # Récupération des bv commun entre le 1er et le 2nd tour (on enlève ceux qui ont élu dès le premier tour !)
-        print(f"Il y a {(1 - df_2.shape[0]/df_1.shape[0]) *100:.3f}% de bv disparues entre les 2 tours.")
+        print(f"\nIl y a {(1 - df_2.shape[0]/df_1.shape[0]) *100:.3f}% de bv disparues entre les 2 tours.")
         comm_bv = np.intersect1d(df_1["Code_id_bv"],df_2["Code_id_bv"])
 
         def find_common(bv):
@@ -194,22 +190,40 @@ def clear(
         print((df_1.iloc[to_analyse]["Code_id_bv"].to_numpy() == df_2["Code_id_bv"].to_numpy()).sum() / df_2.shape[0] * 100,"% de correspondance entre les bv du 1er et 2nd tour !")
 
         # On enlève les éléments inutiles
-        df_1f = df_1.iloc[to_analyse].drop(columns="Code_id_bv").reset_index(drop=True)
-        df_2f = df_2.drop(columns="Code_id_bv").reset_index(drop=True)
+        df_1f = df_1.iloc[to_analyse].drop(columns="Code_id_bv").reset_index(drop=True).drop(columns=df_1.keys()[df_1.sum() == 0][0])
+        df_2f = df_2.drop(columns="Code_id_bv").reset_index(drop=True).drop(columns=df_2.keys()[df_2.sum() == 0][0])
+
+        # On retire aussi les bureauw de votes ne présentant aucun inscrit (et oui il y en a !)
+        print(f"\nIl y a {df_1f[df_1f.sum(axis=1) == 0].index.shape[0]} bureaux de votes ne pésentant aucun votants au premier tours")
+        print(f"Il y a {df_2f[df_2f.sum(axis=1) == 0].index.shape[0]} bureaux de votes ne pésentant aucun votants au second tours")
+        print(f"""\n
+        1er tour (bv id) : {df_1f[df_1f.sum(axis=1) == 0].index}
+        2nd tour (bv id) : {df_2f[df_2f.sum(axis=1) == 0].index}
+        """)
+
+        to_drop = np.concatenate(
+            [
+                df_1f[df_1f["Exprimés"] == 0].index.to_numpy(),
+                df_2f[df_2f["Exprimés"] == 0].index.to_numpy()
+            ]
+        )
+        
+        df_1ff = df_1f.drop(index=to_drop)
+        df_2ff = df_2f.drop(index=to_drop)
 
         # Sauvegrade du Dataset utilisable
-        df_1f.to_csv(final_dataframe1, index=False)
-        df_2f.to_csv(final_dataframe2, index=False)
+        df_1ff.to_csv(final_dataframe1, index=False)
+        df_2ff.to_csv(final_dataframe2, index=False)
 
-    return df_1f, df_2f
+    return df_1ff, df_2ff
 
-def clarifiation(
+def prepare_supervised(
         df
 ):
     """
-    ### Fonction de préparation pour l'autoencodeur
+    ### Fonction de préparation pour l'apprentissage supervisée
     
-    _Faible mise en forme des données pour l'utilisation de l'auto-encodeur_
+    _Faible mise en forme des données du second tour mettant en avant les différents paramètres utilisable pour chaque bureau de vote._
     """
 
     df_1 = df.drop(columns=df.keys()[df.isna().sum() >= df.shape[0]])
@@ -221,40 +235,30 @@ def clarifiation(
             to_drop.append(key)
         elif key[:3] == "Nom":
             to_drop.append(key)
-        elif key[:3] == "Elu":
-            to_drop.append(key)
+        # elif key[:3] == "Elu":
+        #     to_drop.append(key)
         elif key[:6] == "Prénom":
             to_drop.append(key)
         elif key[:6] == "Numéro":
             to_drop.append(key)
         elif key[:7] == "Libellé":
             to_drop.append(key)
+        elif key[:4] == "Sexe":
+            to_drop.append(key)
+        # elif key[:6] == "Nuance":
+        #     to_drop.append(key)
+        elif key[:4] == "Voix":
+            to_drop.append(key)
 
     df_2 = df_1.drop(columns=to_drop)
 
-    df_3 = df_2.fillna(0)
+    df_3 = df_2.drop(index=df_2[df_2["Exprimés"] == 0].index)
 
-    df_4 = df_3.replace({
-        "MASCULIN":0,
-        "FEMININ":1
-        })
-    
-    # Encodage des Labels qualitatifs
-    encodeur = []
+    df_4 = df_3[df_3.keys()[:9]].reset_index(drop=True)
 
-    listing = params.Nuances_politiques
-    listing.append(0)
-    encodeur_nuances = LabelEncoder().fit(listing)
-    encodeur.append(["Nuance",encodeur_nuances])
+    Nuances = df_3[df_3.keys()[9::2]].melt()["value"]
+    Elected = df_3[df_3.keys()[10::2]].melt()["value"]
 
-    df_5 = df_4
-    for k in df_4.keys():
-        if k[:6] == "Nuance":
-            df_5[k] = encodeur_nuances.transform(df_4[k])
+    Gagnants = Nuances[Elected[Elected == "élu"].index].reset_index(drop=True)
 
-    for k in ["Code département", "Code commune", "Code BV"]:
-        encodeur_spe = LabelEncoder().fit(df_4[k])
-        encodeur.append([k,encodeur_spe])
-        df_5[k] = encodeur_spe.transform(df_4[k])
-    
-    return df_5, encodeur
+    return df_4, Gagnants
