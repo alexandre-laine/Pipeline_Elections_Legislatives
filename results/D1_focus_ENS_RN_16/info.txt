@@ -1,0 +1,3 @@
+num_epochs = 1500
+batch_size = 32
+lr = 1e-05

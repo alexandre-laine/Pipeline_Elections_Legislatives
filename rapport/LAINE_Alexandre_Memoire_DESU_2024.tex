@@ -91,6 +91,10 @@
             \begin{equation}
                 \hat{D_2} = D_1 \times M
             \end{equation}
+            L'objectif est donc d'utiliser les résultats du premier et du second tour afin d'apprendre de façon automatique cette matrice $M$. Ce modèle de transfert de voix sera donc constituer de d'une couche d'entrée dont la taille correspondra au nombre de nuances politiques présentent au premier tour dans toute la France, mais aussi d'une couche de sortie, dont la taille correspondra au nombre de nuances présentent au second tour. La matrice $M$ correspond par conséquent aux poids reliant la première à la seconde couche. Un élément important est de tenir compte du niveau de complexité ($O$). Il est possible de le calculer en suivant la formule ci-contre dans laquelle on retrouve $i$ le nombre d'itération, $n$ la taille de l'échantillon d'entrainement, $h$ le nombre de neurones présent dans les couches cachées, $k$ le nombre de couches cachées, $o$ le nombre de neurones de sortie et $m$ le nombre de paramètres à prendre en compte.
+            \begin{equation}
+                O(i,n,m,h,k,o) = i \cdot n \cdot (m \cdot h + (k - 1) \cdot h \cdot h + h \cdot o)
+            \end{equation}
 
         \subsection*{Fonction de coût}
             \subsubsection*{Divergence de Kullback-Leilbler}
