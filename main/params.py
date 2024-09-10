@@ -11,6 +11,7 @@ import matplotlib.cm as cm
 cwd = os.path.dirname(os.getcwd())
 datasets_path = os.path.join(cwd, "datasets")
 figures_path = os.path.join(cwd, "fig")
+results_path = os.path.join(cwd, "results")
 
 #--------- Noms fichiers
 dataset_1er_tour = "1ertour_legislative"
