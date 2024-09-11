@@ -19,7 +19,7 @@ def load_data(
     ### Fonction de chargement des données
     """
     
-    path_to_load = os.path.join(params.datasets_path, file_name)
+    path_to_load = os.path.join(params.datasets_raw_path, file_name)
 
     if os.path.exists(path_to_load):
 
@@ -32,7 +32,7 @@ def load_data(
 
     else :
 
-        print(f"The file '{file_name}' does not seem to exist in the folder '{params.datasets_path}'")
+        print(f"The file '{file_name}' does not seem to exist in the folder '{params.datasets_raw_path}'")
 
     return data
 
@@ -58,7 +58,7 @@ def prepare(
         - encodeur : encodeur utilisé pour créer l'identifiant du bureau de vote
     """
 
-    process_dataframe = os.path.join(params.datasets_path,f"df-{name}.csv")
+    process_dataframe = os.path.join(params.datasets_pp_path,f"df-{name}.csv")
 
     if os.path.exists(process_dataframe):
 
@@ -164,8 +164,8 @@ def clear(
     _Comparaison des DataFrames du 1er et 2nd tour afin d'enlever les bureaux de votes n'ayant pas participer au second tour._ \n
     """
 
-    final_dataframe1 = os.path.join(params.datasets_path,f"DF_{name1}.csv")
-    final_dataframe2 = os.path.join(params.datasets_path,f"DF_{name2}.csv")
+    final_dataframe1 = os.path.join(params.datasets_pp_path,f"DF_{name1}.csv")
+    final_dataframe2 = os.path.join(params.datasets_pp_path,f"DF_{name2}.csv")
 
     if os.path.exists(final_dataframe1) and os.path.exists(final_dataframe2):
 

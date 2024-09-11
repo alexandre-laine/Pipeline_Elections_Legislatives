@@ -9,7 +9,8 @@ import matplotlib.cm as cm
 
 #--------- Path
 cwd = os.path.dirname(os.getcwd())
-datasets_path = os.path.join(cwd, "datasets")
+datasets_raw_path = os.path.join(cwd, "datasets_raw")
+datasets_pp_path = os.path.join(cwd, "datasets_pp")
 figures_path = os.path.join(cwd, "fig")
 results_path = os.path.join(cwd, "results")
 

@@ -81,17 +81,20 @@
             Résultats des élections législatives pour le premier et second tour pour chaque bureau de vote en France métropolitaine, dans les Territoires d'Outre Mer, mais aussi à  l'étranger. Il s'agit respectivement de fichier d'environ 40 et 16 Mo, renseignant pour chaque bureau de vote le nombre de voix obtenu par chaque candidat, ainsi que le nombre d'inscrit, le nombre d'abstension et le nombre de bulletin nul.
         
         \subsection*{Pré-processing des données}
-            De façon géénral l'objectif de cette phase de préprocessing 
+            De façon général l'objectif de cette phase de préprocessing est de supprimer les colonnes ainsi que les lignes vides 
 
-        \subsection*{Analyse géographique}
-
+        \subsection*{Analyse supervisée}
+            Afin d'étudier s'il existe des paramètres permettant de prédire les résultats des élections législatives, il est possible d'utiliser un modèle simple d'apprentissage supervisé. Celui-ci cherche par conséquent à prédire le partie gagnant à partir de paramètres comme le département dans lequel le bureau de vote est, ou bien le nombre d'inscrit sur les listes électorale de ce bureau de vote.
+            Afin de pousser cette analyse un peu plus loin, nous avons essayer d'extraires d'autres paramètres socio-économiques comme
 
         \subsection*{Modèle de transfert de voix}
             Si on considère le pourcentage de voix obtenu par chaque partie dans un bureau de vote comme une distribution discrète notée $D$, l'hypothèse est qu'il existerait une matrice de transition $M$ permettant de faire le lien entre les distributions du premier et second tour (respectivement $D_1$ et $D_2$). Mathématiquement, cela s'exprimerait comme suit :
             \begin{equation}
                 \hat{D_2} = D_1 \times M
             \end{equation}
-            L'objectif est donc d'utiliser les résultats du premier et du second tour afin d'apprendre de façon automatique cette matrice $M$. Ce modèle de transfert de voix sera donc constituer de d'une couche d'entrée dont la taille correspondra au nombre de nuances politiques présentent au premier tour dans toute la France, mais aussi d'une couche de sortie, dont la taille correspondra au nombre de nuances présentent au second tour. La matrice $M$ correspond par conséquent aux poids reliant la première à la seconde couche. Un élément important est de tenir compte du niveau de complexité ($O$). Il est possible de le calculer en suivant la formule ci-contre dans laquelle on retrouve $i$ le nombre d'itération, $n$ la taille de l'échantillon d'entrainement, $h$ le nombre de neurones présent dans les couches cachées, $k$ le nombre de couches cachées, $o$ le nombre de neurones de sortie et $m$ le nombre de paramètres à prendre en compte.
+            L'objectif est donc d'utiliser les résultats du premier et du second tour afin d'apprendre de façon automatique cette matrice $M$ de ($n$ lignes et $m$ colonnes correspondant respectivement au nombre de nuances au premier et au second tour). Ce modèle de transfert de voix sera donc constituer d'une couche d'entrée dont la taille correspond au nombre de nuances politiques présentent au premier tour dans toute la France, mais aussi d'une couche de sortie, dont la taille correspond au nombre de nuances présentent au second tour. La matrice $M$ correspond par conséquent aux poids reliant la première à la seconde couche. 
+            % Ajouter un schéma qui représente ce que je dis là
+            Un élément important est de tenir compte du niveau de complexité ($O$). Il est possible de le calculer en suivant la formule ci-contre dans laquelle on retrouve $i$ le nombre d'itération, $n$ la taille de l'échantillon d'entrainement, $h$ le nombre de neurones présent dans les couches cachées, $k$ le nombre de couches cachées, $o$ le nombre de neurones de sortie et $m$ le nombre de paramètres à prendre en compte.
             \begin{equation}
                 O(i,n,m,h,k,o) = i \cdot n \cdot (m \cdot h + (k - 1) \cdot h \cdot h + h \cdot o)
             \end{equation}
@@ -103,11 +106,11 @@
                     KL(D_2,\hat{D_2}) = \sum_{k \in \Omega} D_2 \cdot \log \frac{D_2}{\hat{D_2}}
                 \end{equation}
 
-            \subsection*{Distance de Hamming}
-                La distance de Hamming (Ham) permet de quantifier la distance mathématiques entre deux séquences. Si on la considère dans notre cas, il s'agit d'une quantification de la distance entre la séquence réelle des résultats du second tour ($D_2$) et la séquence prédite par le model ($\hat{D_2}$) selon la formule suivante :
-                \begin{equation}
-                    Ham(D_2, \hat{D_2}) = \sum_{i=0}^{n-1}(D_2_i \bigoplus \hat{D_2_i})
-                \end{equation}
+            % \subsection*{Distance de Hamming}
+            %     La distance de Hamming (Ham) permet de quantifier la distance mathématiques entre deux séquences. Si on la considère dans notre cas, il s'agit d'une quantification de la distance entre la séquence réelle des résultats du second tour ($D_2$) et la séquence prédite par le model ($\hat{D_2}$) selon la formule suivante :
+            %     \begin{equation}
+            %         Ham(D_2, \hat{D_2}) = \sum_{i=0}^{n-1}(D_2_i \bigoplus \hat{D_2_i})
+            %     \end{equation}
 
         \subsection*{Visualisation et représentations graphiques}
             Afin de visualiser le jeu de donné et de rendre compte des différents résultats obtenues dans cette pipeline, il a été choisis d'utiliser principalement les bibliothèques matplotlib (version 3.9.0) et seaborn (version 0.13.2) pour leurs simplicités d'utilisation mais aussi de découvrir plotly (version 5.24.0) pour la qualité de ses graphiques interactifs et sa capacité à gérer une grande quantité de données. La plus part des figures créer das la pipeline sont enregistrées de façon automatique en format pdf au sein du dossier "fig" de la pipeline.
