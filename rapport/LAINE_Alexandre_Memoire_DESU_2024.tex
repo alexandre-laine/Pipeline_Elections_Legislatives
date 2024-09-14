@@ -30,6 +30,10 @@
 % For the math symbol in latex equations
 \usepackage{amsmath}
 
+% For 
+\usepackage{graphicx}
+\graphicspath{{../fig/} }
+
 \begin{document}
     
     %-------------------------
@@ -67,9 +71,18 @@
     %-------------------------
     \section{Introduction}
 
-    Peu après les élections européenne 2024 auxquelles la liste du Rassemblement National (RN), porté par Jordan Bardella et Marine Le Pen, a obtenu 37 \% des suffrages \cite{Résultats_européennes_2024_2024}. Le Président de la République a décidé de dissoudre l'Assemblée Nationale et ainsi déclencher des élections législatives anticipées. Après un premier tour record pour le RN, c'est finallement le Nouveau Front Populaire (NFP ou Union de la Gauche, UG) qui est arrivé en tête (182 sièges) après un entre deux tours rythmé par les désistements et les consignes de votes afin de faire barrage au RN dans un maximum de circonscriptions \cite{Élections_législatives_françaises_de_2024_2024}. 
+    Peu après les élections européenne 2024 auxquelles la liste du Rassemblement National (RN), porté par Jordan Bardella et Marine Le Pen, a obtenu 37 \% des suffrages \cite{Le_Monde_2024a}. Le Président de la République a décidé de dissoudre l'Assemblée Nationale et ainsi déclencher des élections législatives anticipées. Après un premier tour record pour le RN, c'est finallement le Nouveau Front Populaire (NFP ou Union de la Gauche, UG) qui est arrivé en tête (182 sièges) après un entre deux tours rythmé par les désistements et les consignes de votes afin de faire barrage au RN dans un maximum de circonscriptions \cite{Wikipédia_2024a}. 
 
-    Ces mouvements de voix sont particulièrement interressant car on peut alors se demander s'il est possible de prédire à partir des résultats du premier tour comment va dérouler le second. Basée sur cette question, il s'agirait par conséquent de déviner les mouvements de voix entre les deux tours en sachant que ce sont majoritairement les électeurs des partis perdant qui doivent alors faire un choix. En guise de base à ce travail, il a été décrit et imaginé, par Laurent Perrinet, une approche permettant d'estimer le transfert des voix entre les deux tours des élections présidentielles de 2022 \cite{Perrinet_2022}.
+    \begin{wrapfigure}{R}{0.4\textwidth}
+        \begin{center}
+            \includegraphics[width=0.38\textwidth]{Resultats_2024.png}    
+        \end{center}
+        \caption{Répartition de l'assemblée nationale suite aux élections législatives anticipées de 2024 \cite{Le_Monde_2024b}.}
+    \end{wrapfigure}
+
+    Ces mouvements de voix sont particulièrement interressant, et il est possible de se demander si les résultats du premiers tour sont suffisant pour prédire le dérouler du second. Basée sur cette interrogation, il s'agirait par conséquent de trouver une règle décrivant les mouvements de voix entre les deux tours. Depuis la publication des résultats, très peu de travaux ont été publié. La seule approche utilisé à ma connaissance, et ne se basant sur des sondages, est celle de l'apprentissage statistique \cite{Amblard_2024} visant à estimer le taux de report entre les familles politiques. Celui-ci prend alors la forme d'une distribution sur l'ensemble des circonscriptions décrite par une moyenne et une variance particulière. Néanmoins cette approche ne répond pas tout à fait à la question posée, en guise de base à ce travail, il a déjà été décrit une approche d'apprentissage automatique permettant d'estimer le transfert des voix entre les deux tours des élections présidentielles de 2022 sous la forme d'une matrice \cite{Perrinet_2022}. Néanmoins, dans notre cas des élections législatives, le problème est plus complexe, car dans chaque circonscription les nuances des candidats du second tour peuvent être différentes. Cela ajoute par conséquent à l'hétérogénéïté des bureaux de vote une forte diversité quand au grand nombre de faces à faces possibles. 
+
+    L'objectif de ce projet est donc d'utiliser cette approche d'apprentissage automatique afin de trouver une matrice représentant le taux de transfert de voix de chaque partie du premier tour vers ceux du second tour. Il est alors nécessaire de passer par plusieurs niveau de complexité, tout d'abord en regroupant les différentes nuances politiques sous la forme de famille, puis de resteindre l'apprentissage qu'à des cas particulier de face à face, avant de tenter la phase la plus complexe en tentant l'apprentissage sur l'ensemble des bureaux de votes. Cependant, il est import de notifier quelques précisions. Tout d'abord, il est normalement impossible de trouver le taux réel de report entre deux nuances, car celui-ci est surement dépendant de paramètres géographiques et socio-économiques. Ensuite, ce taux de report généralise une règle pour l'ensemble d'un partie et passe donc au dessus des possibles divergences présentent. Enfin, s'agissant d'un sujet actuel, l'objectif n'est ici en aucun cas de "refaire le match" mais seulement d'utiliser des outils issues de l'intelligence artifielle afin d'analyser les données de ces élections en ce concentrant sur les mouvements de voix notamment dû à la mise en place d'un "front républicain". Ce terme, apparût pour la première fois à l'occasion des élections législatives de 1956, prend racine dans la défense républicaine qui a eu lieu au début de la troisième république afin de faire barrage aux élans monarchistes.
     
     \newpage
     %-------------------------
@@ -81,11 +94,14 @@
             Résultats des élections législatives pour le premier et second tour pour chaque bureau de vote en France métropolitaine, dans les Territoires d'Outre Mer, mais aussi à  l'étranger. Il s'agit respectivement de fichier d'environ 40 et 16 Mo, renseignant pour chaque bureau de vote le nombre de voix obtenu par chaque candidat, ainsi que le nombre d'inscrit, le nombre d'abstension et le nombre de bulletin nul.
         
         \subsection*{Pré-processing des données}
-            De façon général l'objectif de cette phase de préprocessing est de supprimer les colonnes ainsi que les lignes vides 
+            De façon général l'objectif de cette phase de préprocessing est de supprimer les colonnes ainsi que les lignes vides, mais aussi les informations qui ne nous seront pas nécessaire pour la suite : genre, nom et prénom du candidat, nom de la commune et du département, ainsi que les bureaux de votes n'ayant pas eu besoin de second tour car ceux-là ne peuvent pas nous renseigner sur le report de voix. Il est important de noter qu'avant toutes étape d'apprentisage, le jeu de donné est coupé en deux parties, la première permettant l'entrainement, et la seconde permettant d'évaluer la précision du modèle sans que cela soit pris en compte pour l'apprentisage. De plus, bien que le tableau ne soit composé que du nombre de voix obtenue par chaque nuance, la première étape dans la fonction d'apprentissage consiste à diviser le nombre de vote obtenue par chaque nuance au sein d'un bureau de vote par le nombre total de vote obtenue dans ce bureau de vote.
 
-        \subsection*{Analyse supervisée}
-            Afin d'étudier s'il existe des paramètres permettant de prédire les résultats des élections législatives, il est possible d'utiliser un modèle simple d'apprentissage supervisé. Celui-ci cherche par conséquent à prédire le partie gagnant à partir de paramètres comme le département dans lequel le bureau de vote est, ou bien le nombre d'inscrit sur les listes électorale de ce bureau de vote.
-            Afin de pousser cette analyse un peu plus loin, nous avons essayer d'extraires d'autres paramètres socio-économiques comme
+            Afin d'avoir une progression dans la complexité de la tâche d'apprentissage automatique, on différenciera trois façon de préparer le jeu de donné :
+            \begin{itemize}
+                \item En regroupant les nuances en familles politiques. L'objectif a été ici de rassembler dans chaque bureau de vote les résultats des nuances présentents sous la forme de grand groupes, en se basant sur leur localisation dans l'éventail politiques \cite{Wikipédia_2024b}.
+                \item En se focalisant uniquement sur les bureaux de votes présentant des face-à-faces particuliers. Notament en se focalisant principalement sur sur ceux ayant généré beaucoup de report dû à la présence du Rassemblement National au second tour.
+                \item En conservant toute la complexité des élections, mais en supprimant tout de même le nombre d'abstention, de vote nul, ou de vote blanc.
+            \end{itemize}
 
         \subsection*{Modèle de transfert de voix}
             Si on considère le pourcentage de voix obtenu par chaque partie dans un bureau de vote comme une distribution discrète notée $D$, l'hypothèse est qu'il existerait une matrice de transition $M$ permettant de faire le lien entre les distributions du premier et second tour (respectivement $D_1$ et $D_2$). Mathématiquement, cela s'exprimerait comme suit :
@@ -93,24 +109,16 @@
                 \hat{D_2} = D_1 \times M
             \end{equation}
             L'objectif est donc d'utiliser les résultats du premier et du second tour afin d'apprendre de façon automatique cette matrice $M$ de ($n$ lignes et $m$ colonnes correspondant respectivement au nombre de nuances au premier et au second tour). Ce modèle de transfert de voix sera donc constituer d'une couche d'entrée dont la taille correspond au nombre de nuances politiques présentent au premier tour dans toute la France, mais aussi d'une couche de sortie, dont la taille correspond au nombre de nuances présentent au second tour. La matrice $M$ correspond par conséquent aux poids reliant la première à la seconde couche. 
-            % Ajouter un schéma qui représente ce que je dis là
-            Un élément important est de tenir compte du niveau de complexité ($O$). Il est possible de le calculer en suivant la formule ci-contre dans laquelle on retrouve $i$ le nombre d'itération, $n$ la taille de l'échantillon d'entrainement, $h$ le nombre de neurones présent dans les couches cachées, $k$ le nombre de couches cachées, $o$ le nombre de neurones de sortie et $m$ le nombre de paramètres à prendre en compte.
+
+
+        \subsubsection*{Divergence de Kullback-Leilbler}
+            La divergence de Kullback-Leilbler \cite{Kullback_Leibler_1951} ($KL$) est une mesure permettant la comparaison entre deux distributions de probabilités discrètres. Celle-ci nous permettra de comparer la distance entre les distributions réelles du second tour ($D_2$) et celles prédites par notre modèle ($\hat{D_2}$) selon la formule suivante :
             \begin{equation}
-                O(i,n,m,h,k,o) = i \cdot n \cdot (m \cdot h + (k - 1) \cdot h \cdot h + h \cdot o)
+                KL(D_2,\hat{D_2}) = \sum_{k \in \Omega} D_2 \cdot \log \frac{D_2}{\hat{D_2}}
             \end{equation}
 
-        \subsection*{Fonction de coût}
-            \subsubsection*{Divergence de Kullback-Leilbler}
-                La divergence de Kullback-Leilbler \cite{Kullback_Leibler_1951} ($KL$) est une mesure permettant la comparaison entre deux distributions de probabilités discrètres. Celle-ci nous permettra de comparer la distance entre les distributions réelles du second tour ($D_2$) et celles prédites par notre modèle ($\hat{D_2}$) selon la formule suivante :
-                \begin{equation}
-                    KL(D_2,\hat{D_2}) = \sum_{k \in \Omega} D_2 \cdot \log \frac{D_2}{\hat{D_2}}
-                \end{equation}
-
-            % \subsection*{Distance de Hamming}
-            %     La distance de Hamming (Ham) permet de quantifier la distance mathématiques entre deux séquences. Si on la considère dans notre cas, il s'agit d'une quantification de la distance entre la séquence réelle des résultats du second tour ($D_2$) et la séquence prédite par le model ($\hat{D_2}$) selon la formule suivante :
-            %     \begin{equation}
-            %         Ham(D_2, \hat{D_2}) = \sum_{i=0}^{n-1}(D_2_i \bigoplus \hat{D_2_i})
-            %     \end{equation}
+        \subsubsection*{Entrainement et contrôle}
+            Bien qu'il soit possible d'incorporer une fonction de stop anticipé de l'apprentissage, le choix fait ici a été de tenter différents nombre d'itération et de stopper l'apprentisage dès que le résultats de la fonction de coût, pour la partie de validation, se stabilise. La descente de gradient est réalisée par une implémentation pytorch de l'agorithme d'optimisation Adam très efficace dans le cas d'un jeu de donné large et d'une optimisation d'un grand nombre de paramètres \cite{Kingma_Ba_2017}.
 
         \subsection*{Visualisation et représentations graphiques}
             Afin de visualiser le jeu de donné et de rendre compte des différents résultats obtenues dans cette pipeline, il a été choisis d'utiliser principalement les bibliothèques matplotlib (version 3.9.0) et seaborn (version 0.13.2) pour leurs simplicités d'utilisation mais aussi de découvrir plotly (version 5.24.0) pour la qualité de ses graphiques interactifs et sa capacité à gérer une grande quantité de données. La plus part des figures créer das la pipeline sont enregistrées de façon automatique en format pdf au sein du dossier "fig" de la pipeline.
@@ -123,7 +131,18 @@
     % Résultats (4pages)
     %-------------------------
     \section{Résultats}
+            
+        \subsection*{Grandes familles politiques}
 
+        \subsection*{Face-à-face}
+            \subsubsection*{RN ou UG}
+
+            \subsubsection*{RN ou ENS}
+
+            \subsubsection*{RN ou LR}
+        
+        \subsection*{Généralisation nationale}
+        
     \newpage
     %-------------------------
     % Discussion (1page) + Références
