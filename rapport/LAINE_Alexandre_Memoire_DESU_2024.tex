@@ -77,7 +77,7 @@
         \begin{center}
             \includegraphics[width=0.38\textwidth]{Resultats_2024.png}    
         \end{center}
-        \caption{Répartition de l'assemblée nationale suite aux élections législatives anticipées de 2024 \cite{Le_Monde_2024b}.}
+        \caption{Répartition de l'Assemblée nationale suite aux élections législatives anticipées de 2024 \cite{Le_Monde_2024b}.}
     \end{wrapfigure}
 
     Ces mouvements de voix sont particulièrement intéressants, et il est possible de se demander si les résultats du premier tour sont suffisants pour prédire le déroulement du second. Basé sur cette interrogation, il s'agit donc de trouver une règle décrivant les mouvements de voix entre les deux tours. Depuis la publication des résultats, très peu de travaux ont été publiés. La seule approche utilisée à ma connaissance, et ne se basant pas sur des sondages, est celle de l'apprentissage statistique \cite{Amblard_2024}, visant à estimer le taux de report entre les "familles" politiques. Celui-ci prend alors la forme d'une distribution sur l'ensemble des circonscriptions décrite par une moyenne et une variance particulières. Néanmoins, cette approche ne répond pas tout à fait à la question posée. En guise de base à ce travail, il a déjà été décrit une approche d'apprentissage automatique permettant d'estimer le transfert des voix entre les deux tours des élections présidentielles de 2022 sous la forme d'une matrice \cite{Perrinet_2022}. Cependant, dans le cas des élections législatives, le problème est plus complexe, car dans chaque circonscription, les nuances des candidats du second tour peuvent être différentes. Cela ajoute à l'hétérogénéité des bureaux de vote une forte diversité en raison du grand nombre de face-à-face possibles.
@@ -144,7 +144,7 @@
             Afin de visualiser le jeu de données et de rendre compte des différents résultats obtenus dans cette pipeline, il a été choisi d'utiliser principalement les bibliothèques matplotlib (version 3.9.0) et seaborn (version 0.13.2) pour leur simplicité d'utilisation, ainsi que plotly (version 5.24.0) pour la qualité de ses graphiques interactifs et sa capacité à gérer une grande quantité de données. La plupart des figures créées dans la pipeline sont automatiquement enregistrées au format PDF dans le dossier "fig" de la pipeline.
             
         \subsection*{Information supplémentaires}
-            L'ensemble du code de la pipeline est disponible en libre accès sur la plateforme GitHub en cliquant simplement \href{https://github.com/alexandre-laine/Pipeline_Elections_Legislatives}{ici}. Toute l'analyse a été développée et écrite pour le mémoire du DESU en utilisant le langage de programmation Python (version 3.11.9) ainsi que la librairie open source PyTorch \cite{Ansel_Yang_He_Gimelshein_Jain_Voznesensky_Bao_Bell_Berard_Burovski_et_al._2024}, principalement sous la forme de notebooks appelant des fonctions écrites par mes soins. Les calculs ont été réalisés en local sur mon ordinateur personnel (OMEN by HP Laptop 16-xf0xx) avec les caractéristiques suivantes : CPU : AMD Ryzen 9 7940HS, GPU-1 : AMD Radeon 780M, GPU-2 : NVIDIA GeForce RTX 4070.
+            L'ensemble du code de la pipeline est disponible en libre accès sur la plateforme GitHub en cliquant simplement \href{https://github.com/alexandre-laine/Pipeline_Elections_Legislatives}{ici}, ou en suivant ce lien : \url{https://github.com/alexandre-laine/Pipeline_Elections_Legislatives}. Toute l'analyse a été développée et écrite pour le mémoire du DESU en utilisant le langage de programmation Python (version 3.11.9) ainsi que la librairie open source PyTorch \cite{Ansel_Yang_He_Gimelshein_Jain_Voznesensky_Bao_Bell_Berard_Burovski_et_al._2024}, principalement sous la forme de notebooks appelant des fonctions écrites par mes soins. Les calculs ont été réalisés en local sur mon ordinateur personnel (OMEN by HP Laptop 16-xf0xx) avec les caractéristiques suivantes : CPU : AMD Ryzen 9 7940HS, GPU-1 : AMD Radeon 780M, GPU-2 : NVIDIA GeForce RTX 4070.
 
     \newpage
     %-------------------------
@@ -161,7 +161,7 @@
                     \includegraphics[height=4cm]{Famille_Matrice.pdf}
                     \includegraphics[height=4cm]{Famille_True_Pred_Hist.pdf}
                     \includegraphics[height=4cm]{Famille_Proportions.pdf}
-                    \caption{Gauche) Matrice de transition de l'entre deux tour estimée. Centre) Comparaison entre les valeurs prédites et réelle par le biai un d'un histogramme en deux dimensions. Droite) Représentation estimée de chaque "familles" du premier tour dans les résultats des "familles" du second tour.}
+                    \caption{Gauche) Matrice de transition entre les deux tours estimée. Centre) Comparaison entre les valeurs prédites et réelles au moyen d'un histogramme bidimensionnel. Droite) Représentation estimée de chaque "famille" du premier tour dans les résultats des "familles" du second tour.}
                     \label{fig:Famille}
                 \end{center}
             \end{figure}
@@ -175,7 +175,7 @@
             \begin{figure}
                 \begin{center}
                     \includegraphics[width=0.9\textwidth]{Focus_True_Pred_Hist.pdf}
-                    \caption{Histograme bi-dimensionnel de chaque type de face-à-face du score prédit en fonction du score réel. Créé avec des fenêtres 1 \% la couleur indique la densité de point dans la zone.}
+                    \caption{Histogramme bidimensionnel des scores prédits en fonction des scores réels pour chaque type de face-à-face. Créé avec des fenêtres de 1 \%, la couleur indique la densité des points dans la zone.}
                     \label{fig:Focus_pred_true}
                 \end{center}
             \end{figure}
@@ -183,21 +183,21 @@
             \begin{figure}
                 \begin{center}
                     \includegraphics[width=0.7\textwidth]{Focus_ENS_RN.pdf}
-                    \caption{Taux de report de chaque parti du premier tour vers l'un des deux candidat du second tour, lors des face-à-face entre ENS et le RN.}
+                    \caption{Taux de report de chaque parti du premier tour vers l'un des deux candidats du second tour, lors des face-à-face entre ENS et le RN.}
                     \label{fig:ENS-RN}
                 \end{center}
             \end{figure}
             \begin{figure}
                 \begin{center}
                     \includegraphics[width=0.7\textwidth]{Focus_UG_RN.pdf}
-                    \caption{Taux de report de chaque parti du premier tour vers l'un des deux candidat du second tour, lors des face-à-face entre UG et le RN.}
+                    \caption{Taux de report de chaque parti du premier tour vers l'un des deux candidats du second tour, lors des face-à-face entre UG et le RN.}
                     \label{fig:UG-RN}
                 \end{center}
             \end{figure}
             \begin{figure}
                 \begin{center}
                     \includegraphics[width=0.7\textwidth]{Focus_LR_RN.pdf}
-                    \caption{Taux de report de chaque parti du premier tour vers l'un des deux candidat du second tour, lors des face-à-face entre LR et le RN.}
+                    \caption{Taux de report de chaque parti du premier tour vers l'un des deux candidats du second tour, lors des face-à-face entre LR et le RN.}
                     \label{fig:LR-RN}
                 \end{center}
             \end{figure}
@@ -210,7 +210,7 @@
                 \begin{center}
                     \includegraphics[height=5cm]{Total_True_Pred_Hist.pdf}
                     \includegraphics[height=5cm]{Total-Matrice-Participation.pdf}
-                    \caption{Gauche) Représentation des résultats prédit pour chaque bureau de vote en fonction des résultats réels. Droite) Taux de représentation estimé de chaque nuance du premier tour dans les résultats de chaque nuance du second tour.}
+                    \caption{Gauche) Représentation des résultats prédits pour chaque bureau de vote en fonction des résultats réels. Droite) Taux de représentation estimé de chaque nuance du premier tour dans les résultats de chaque nuance du second tour.}
                     \label{fig:True-Pred-Total}
                 \end{center}
             \end{figure}
@@ -227,6 +227,10 @@
         Enfin, dans le cas le plus complexe, la précision semble bonne, mais on remarque une forte propension du modèle à sous-estimer une bonne partie des résultats. Un schéma récurrent est qu'une nuance arrivée en tête au premier tour remporte le second tour. Il est important de noter que, dans les cas où le Rassemblement National est arrivé en première position au premier tour, certains partis arrivés troisième, et pouvant participer au tour suivant, se sont désistés afin de permettre au deuxième de dépasser le RN lors du second tour. Ce "front républicain" va par conséquent à l'encontre du schéma récurrent présenté plus haut et pourrait expliquer une sous-estimation du modèle qui ne prend pas cet élément en considération.
 
         Cette méthode permet donc d'estimer une matrice de transition pouvant être assimilée à un report des voix, mais semble quelque peu limitée dans ce contexte par le nombre possible de face-à-face. De plus, il n'est raisonnablement pas possible de trouver le taux réel de report entre deux nuances en se basant uniquement sur les résultats, car celui-ci dépend probablement de paramètres géographiques et socio-économiques. Ensuite, ce taux de report généralise une règle pour l'ensemble d'une nuance et passe donc au-dessus des possibles divergences présentes. Un exemple particulièrement frappant, mais ne rentrant pas en jeu ici, est le cas des Républicain et de la discorde entre sa présidence et certains de ses adhérents.
+
+        L'étape suivante, qui pourrait être intéressante, serait de reprendre cette analyse en l'appliquant à plusieurs élections législatives (2007, 2012, 2017, 2022, etc.) afin d'étudier l'évolution de cette matrice au cours des différents quinquennats. Le principal frein serait donc de regrouper les différents partis sous des noms génériques, car ceux-ci changent (au moins de nom) pour la plupart à chaque élection...
+
+
 
     \printbibliography
 
