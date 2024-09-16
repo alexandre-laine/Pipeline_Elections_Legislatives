@@ -92,7 +92,7 @@
     %-------------------------
     \section{Matériel et Méthodes}
 
-        \subsection*{Jeux de donnés}
+        \subsection*{Jeux de données}
             Les résultats des élections législatives pour le premier et le second tour sont disponibles pour chaque bureau de vote en France métropolitaine, dans les Territoires d'Outre-Mer, ainsi qu'à l'étranger en accès libre sur le site du gouvernement \cite{République_Française}. Ces fichiers, d'environ 40 Mo pour le premier tour et 16 Mo pour le second tour, fournissent pour chaque bureau de vote le nombre de voix obtenues par candidat, ainsi que le nombre d'inscrits, le nombre d'abstentions et le nombre de bulletins nuls.
         
         \subsection*{Pré-processing des données}
@@ -120,7 +120,7 @@
             \begin{equation}
                 \hat{D_2} = D_1 \times M
             \end{equation}
-            L'objectif est donc d'utiliser les résultats du premier et du second tour afin d'apprendre de façon automatique cette matrice $M$ qui a $n$ lignes et $m$ colonnes, correspondant respectivement au nombre de nuances au premier et au second tour. Ce modèle de transfert de voix sera donc constituer d'une couche d'entrée dont la taille correspond au nombre de nuances politiques présentent au premier tour dans toute la France, mais aussi d'une couche de sortie, dont la taille correspond au nombre de nuances présentent au second tour (figure \ref{fig:Model}). La matrice $M$ correspond par conséquent aux poids reliant la première à la seconde couche. 
+            L'objectif est donc d'utiliser les résultats du premier et du second tour afin d'apprendre de façon automatique cette matrice $M$ qui a $n$ lignes et $m$ colonnes, correspondant respectivement au nombre de nuances au premier et au second tour. Ce modèle de transfert de voix sera donc constitué d'une couche d'entrée dont la taille correspond au nombre de nuances politiques présentes au premier tour dans toute la France, mais aussi d'une couche de sortie, dont la taille correspond au nombre de nuances présentes au second tour (figure \ref{fig:Model}). La matrice $M$ correspond par conséquent aux poids reliant la première à la seconde couche. 
             
             \begin{figure}
                 \begin{center}
