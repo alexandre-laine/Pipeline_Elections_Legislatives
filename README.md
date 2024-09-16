@@ -14,15 +14,15 @@ Tout d'abord, les [règles du jeu](https://www.service-public.fr/particuliers/vo
 ### Organisation :
 
 - main : Les notebooks ainsi que les fichiers Python composant la pipeline d'analyse et de visualisation des données et des résultats :
-    - install_requirements.py : installation des librairies présentent dans les fichiers .py. **Attention**, les librairies présentent dans les notebooks et notamment _PyTorch_ devront être installées manuellement.
+    - install_requirements.py : installation des librairies présentes dans les fichiers .py. **Attention**, les librairies présentes dans les notebooks et notamment [PyTorch](https://pytorch.org/) devront être installées manuellement, notamment afin d'éviter les problèmes de versions.
     - Preprocessing : mise en forme des données pour le reste de la pipeline.
-    - Visualisation : exploration par la représentation graphique du jeu de donné.
+    - Visualisation : exploration par la représentation graphique du jeu de données.
     - Transfert de Voix : Le nerf de la guerre ! Zone d'apprentissage de la matrice permettant de transformer les résultats du premier tour en ceux du second tour. Avec plusieurs tests différents :
         a) Modèle classique développé lors des élections présidentielles de 2022.
         b) Version avec un blocage des poids de la matrice lorsque la nuance n'a pas obtenue plus de 12.5% des voix lors du premier tour.
-        c,d,e) Focalisation sur les bureaux de vote avec des face-à-face spécifiqeus lors du second tour.
+        c,d,e) Focalisation sur les bureaux de vote avec des face-à-face spécifiques lors du second tour.
         f) Regroupement des nuances sous la forme de grandes familles.
 - rapport : Une version LaTeX et pdf du rapport à rendre/rendu pour l'obtention du DESU.
 - results : Les résultats des différents modèles utilisés.
 - datasets : Les jeux de données de cette pipeline qui ont été trouvée sur [le site gouvernemental](https://www.data.gouv.fr/).
-- fig : Les figures enregistrées par la pipeline au format pdf.
+- fig : Les figures enregistrées par la pipeline au format PDF.
