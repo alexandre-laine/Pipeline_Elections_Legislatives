@@ -15,7 +15,7 @@ Tout d'abord, les [règles du jeu](https://www.service-public.fr/particuliers/vo
 
 ### Organisation :
 
-- main : Les notebooks ainsi que les fichiers Python composant la pipeline d'analyse et de visualisation des données et des résultats :
+- cource : Les notebooks ainsi que les fichiers Python composant la pipeline d'analyse et de visualisation des données et des résultats :
   - install_requirements.py : installation des librairies présentes dans les fichiers .py. **Attention**, les librairies présentes dans les notebooks et notamment [PyTorch](https://pytorch.org/) devront être installées manuellement, notamment afin d'éviter les problèmes de versions.
   - Preprocessing : mise en forme des données pour le reste de la pipeline.
   - Visualisation : exploration par la représentation graphique du jeu de données.
