@@ -3,16 +3,27 @@ auteur:Alexandre
 date:2024/09/01
 """
 
-import os
 from watermark import watermark
 import matplotlib.cm as cm
+from pathlib import Path
+import torch
 
 #--------- Path
-cwd = os.path.dirname(os.getcwd())
-datasets_raw_path = os.path.join(cwd, "datasets_raw")
-datasets_pp_path = os.path.join(cwd, "datasets_pp")
-figures_path = os.path.join(cwd, "fig")
-results_path = os.path.join(cwd, "results")
+cwd = Path.cwd().resolve().parent
+datasets_raw_path = cwd / "datasets_raw"
+datasets_pp_path = cwd / "datasets_pp"
+figures_path = cwd / "fig"
+results_path = cwd / "results"
+
+#--------- Support de calcul
+if torch.cuda.is_available():
+    device = "cuda"
+elif torch.xpu.is_available():
+    device = "xpu"
+elif torch.mps.is_available():
+    device = "mps"
+else:
+    device="cpu"
 
 #--------- Noms fichiers
 dataset_1er_tour = "1ertour_legislative"

@@ -28,3 +28,7 @@ Tout d'abord, les [règles du jeu](https://www.service-public.fr/particuliers/vo
 - results : Les résultats des différents modèles utilisés.
 - datasets : Les jeux de données de cette pipeline qui ont été trouvée sur [le site gouvernemental](https://www.data.gouv.fr/).
 - fig : Les figures enregistrées par la pipeline au format PDF.
+
+TODO : 
+- maj les path avec pathlib
+- maj Cb-Davec xpu et pathlib
