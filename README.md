@@ -2,7 +2,7 @@
  
  _Projet DESU de Data Sciences (Aix-Marseille Université) visant à étudier les résultats des élections législatives anticipées de 2024. Développé par Alexandre Lainé sous la supervision de Laurent Perrinet._
 
-## MAJ 2024/09/09
+_MAJ 2024/09/09_
 
 **Question _scientifique_ :** En se basant sur les résultats des deux tours d'une élection sur un certain nombre de bureaux de vote, est-il possible de prédire les résultats du deuxième tour sur un autre ensemble de bureaux de vote uniquement à partir des résultats du premier tour ?
 
